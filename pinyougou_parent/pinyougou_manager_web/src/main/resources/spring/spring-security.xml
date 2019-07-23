@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+						http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
+
+
+	<!--一下页面你不会被拦截-->
+	<http pattern="/*.html" security="none"/>
+	<http pattern="/css/**" security="none"/>
+	<http pattern="/img/**" security="none"/>
+	<http pattern="/js/**" security="none"/>
+	<http pattern="/plugins/**" security="none"/>
+
+<!--页面被拦截的规则-->
+	<!-- use-expressions 是否启动spel表达式more是true-->
+	<http use-expressions="false">
+<!--表示当前用户必须是ROLE_ADMIN的角色才可以访问目录及其所属的子目录文件-->
+		<intercept-url pattern="/**" access="ROLE_ADMIN"/>
+
+		<!--开始表单登录工能-->
+<form-login login-page="/login.html" default-target-url="/admin/index.html"
+			always-use-default-target="true"	authentication-failure-url="/login.html" />
+		<csrf disabled="true"/>
+
+		<headers>
+			<frame-options policy="SAMEORIGIN"/>
+		</headers>
+
+
+		<!--注销功能实现
+		加此配置后，会自动的产生退出登录的地址/logout,如果你不想用这个地址 ，你也可以定义
+		生成的退出地址以及跳转的页面，配置如下<logout logout-url="" logout-success-url=""/>
+		-->
+		<logout/>
+	</http>
+
+	<!--认证管理器-->
+	<authentication-manager>
+		<authentication-provider>
+			<user-service>
+				<user name="admin" password="123456" authorities="ROLE_ADMIN" />
+				<user name="nibaba"  password="666666" authorities="ROLE_ADMIN"/>
+			</user-service>
+		</authentication-provider>
+	</authentication-manager>
+
+</beans:beans>
