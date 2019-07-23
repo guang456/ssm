@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.itheima.dao.StudentDao">
+    <select id="findAll" resultType="student">
+        select * from t_student
+    </select>
+
+    <insert id="add" parameterType="student">
+        insert into t_student (id,name,sex,age,address) values (#{id},#{name},#{sex},#{age},#{address})
+    </insert>
+
+
+    <delete id="del" parameterType="java.util.ArrayList">
+        delete from t_student
+        where
+        <foreach collection="array" open="id in(" close=")" separator="," item="id">
+            #{id}
+        </foreach>
+     </delete>
+
+ <!--   <select id="findOne" parameterType="com.itheima.domain.User">
+        select * from t_user where name=#{name},password=#{password}
+    </select>-->
+    
+</mapper>
